@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "de.thegerman.dextrader"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+
+    implementation "androidx.appcompat:appcompat:${versions.androidx_app_compat}"
+    implementation "androidx.core:core-ktx:${versions.androidx_core_ktx}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.androidx_constraint_layout}"
+
+    implementation "org.java-websocket:Java-WebSocket:1.4.0"
+
+    implementation 'com.github.WalletConnect:kotlin-walletconnect-lib:e399b68f8f'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
+
+    // Koin for Android
+    implementation "org.koin:koin-android:$versions.koin"
+    // Koin Android Scope features
+    implementation "org.koin:koin-android-scope:$versions.koin"
+    // Koin Android ViewModel features
+    implementation "org.koin:koin-android-viewmodel:$versions.koin"
+    // Koin Android Experimental features
+    implementation "org.koin:koin-android-ext:$versions.koin"
+
+    implementation 'com.squareup.moshi:moshi:1.8.0'
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
