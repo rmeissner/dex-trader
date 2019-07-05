@@ -7,15 +7,68 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.MainActivity">
 
-    <TextView
-        android:id="@+id/screen_main_lbl"
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/screen_main_account_info_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:visibility="gone"
+        app:constraint_referenced_ids="screen_main_account_address_img,screen_main_account_name_lbl,screen_main_account_address_lbl,screen_main_disconnect_btn,screen_main_account_assets_list"
+        tools:visibility="visible" />
+
+    <pm.gnosis.blockies.BlockiesImageView
+        android:id="@+id/screen_main_account_address_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/screen_main_account_name_lbl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/screen_main_account_address_lbl"
+        app:layout_constraintEnd_toStartOf="@+id/screen_main_disconnect_btn"
+        app:layout_constraintStart_toEndOf="@+id/screen_main_account_address_img"
+        app:layout_constraintTop_toTopOf="@+id/screen_main_account_address_img"
+        tools:text="Hello World!"
+        tools:visibility="gone" />
+
+    <TextView
+        android:id="@+id/screen_main_account_address_lbl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/screen_main_account_address_img"
+        app:layout_constraintEnd_toStartOf="@+id/screen_main_disconnect_btn"
+        app:layout_constraintStart_toEndOf="@+id/screen_main_account_address_img"
+        app:layout_constraintTop_toBottomOf="@+id/screen_main_account_name_lbl"
+        tools:text="0xdeadbeef" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/screen_main_account_assets_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/screen_main_account_address_img"
+        tools:itemCount="3" />
+
+    <TextView
+        android:id="@+id/screen_main_disconnect_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Disconnect"
+        app:layout_constraintBottom_toBottomOf="@+id/screen_main_account_address_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/screen_main_account_address_img" />
 
     <TextView
         android:id="@+id/screen_main_connect_btn"
@@ -25,16 +78,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/screen_main_lbl" />
-
-    <TextView
-        android:id="@+id/screen_main_disconnect_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Disconnect"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/screen_main_lbl" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

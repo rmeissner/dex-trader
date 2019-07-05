@@ -2,7 +2,11 @@ package de.thegerman.dextrader
 
 import android.app.Application
 import com.squareup.moshi.Moshi
+import com.squareup.picasso.Picasso
 import de.thegerman.dextrader.bridge.BridgeServer
+import de.thegerman.dextrader.data.AssetApi
+import de.thegerman.dextrader.repositories.AssetRepository
+import de.thegerman.dextrader.repositories.AssetRepositoryImpl
 import de.thegerman.dextrader.repositories.SessionRepository
 import de.thegerman.dextrader.repositories.SessionRepositoryImpl
 import de.thegerman.dextrader.ui.main.MainViewModel
@@ -15,6 +19,8 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import org.walletconnect.impls.FileWCSessionStore
 import org.walletconnect.impls.WCSessionStore
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.io.File
 
 class TraderApplication : Application() {
@@ -26,14 +32,16 @@ class TraderApplication : Application() {
             // Android context
             androidContext(this@TraderApplication)
             // modules
-            modules(listOf(myModule, repositoryModule, viewModelModule))
+            modules(listOf(coreModule, apiModule, repositoryModule, viewModelModule))
 
             val bridge: BridgeServer by inject()
             bridge.init()
         }
     }
 
-    private val myModule = module {
+    private val coreModule = module {
+
+        single { Picasso.get() }
 
         single { OkHttpClient.Builder().build() }
 
@@ -46,9 +54,21 @@ class TraderApplication : Application() {
 
     private val repositoryModule = module {
         single<SessionRepository> { SessionRepositoryImpl(get(), get(), get()) }
+        single<AssetRepository> { AssetRepositoryImpl(get()) }
     }
 
     private val viewModelModule = module {
-        viewModel<MainViewModelContract> { MainViewModel(get()) }
+        viewModel<MainViewModelContract> { MainViewModel(get(), get()) }
+    }
+
+    private val apiModule = module {
+        single<AssetApi> {
+            Retrofit.Builder()
+                .client(get())
+                .baseUrl(AssetApi.BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create(get()))
+                .build()
+                .create(AssetApi::class.java)
+        }
     }
 }

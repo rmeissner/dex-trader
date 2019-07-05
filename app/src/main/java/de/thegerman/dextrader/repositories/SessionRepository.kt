@@ -6,7 +6,6 @@ import de.thegerman.dextrader.bridge.BridgeServer
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.channels.produce
 import okhttp3.OkHttpClient
 import org.walletconnect.Session
 import org.walletconnect.impls.MoshiPayloadAdapter
@@ -14,7 +13,6 @@ import org.walletconnect.impls.OkHttpTransport
 import org.walletconnect.impls.WCSession
 import org.walletconnect.impls.WCSessionStore
 import org.walleth.khex.toNoPrefixHexString
-import java.lang.IllegalStateException
 import java.util.*
 import kotlin.random.Random
 
@@ -27,7 +25,7 @@ interface SessionRepository {
 
     fun sessionUpdatesChannel(): ReceiveChannel<SessionData>
 
-    data class SessionData(val approvedAccounts: List<String>?)
+    data class SessionData(val approvedAccounts: List<String>?, val peerName: String?)
 }
 
 class SessionRepositoryImpl(
@@ -47,17 +45,17 @@ class SessionRepositoryImpl(
             override fun handleMethodCall(call: Session.MethodCall) {}
 
             override fun sessionApproved() {
-                channel.offer(SessionRepository.SessionData(session.approvedAccounts() ?: emptyList()))
+                channel.offer(SessionRepository.SessionData(session.approvedAccounts() ?: emptyList(), session.peerMeta()?.name))
             }
 
             override fun sessionClosed() {
-                channel.offer(SessionRepository.SessionData(null))
+                channel.offer(SessionRepository.SessionData(null, null))
             }
 
         }
         session.addCallback(cb)
         channel.invokeOnClose { session.removeCallback(cb) }
-        channel.offer(SessionRepository.SessionData(session.approvedAccounts() ?: emptyList()))
+        channel.offer(SessionRepository.SessionData(session.approvedAccounts() ?: emptyList(), session.peerMeta()?.name))
         return channel
     }
 
@@ -70,7 +68,7 @@ class SessionRepositoryImpl(
     override fun activeSessionAsync() = GlobalScope.async(Dispatchers.IO) {
         val sessions = sessionStore.list()
         Log.d("#####", "sessions $sessions")
-        sessions.firstOrNull()?.let { SessionRepository.SessionData(it.approvedAccounts) }
+        sessions.firstOrNull()?.let { SessionRepository.SessionData(it.approvedAccounts, it.peerData?.meta?.name) }
     }
 
     override fun createSessionAsync() = GlobalScope.async(Dispatchers.IO) {

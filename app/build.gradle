@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -29,6 +29,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${versions.androidx_app_compat}"
     implementation "androidx.core:core-ktx:${versions.androidx_core_ktx}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx_constraint_layout}"
+    implementation "androidx.recyclerview:recyclerview:$versions.androidx_recycler_view"
 
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.androidx_lifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx_lifecycle"
@@ -40,6 +41,20 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.0.0'
 
+    implementation "com.github.gnosis.svalinn-kotlin:blockies:$versions.svalinn"
+    implementation "com.github.gnosis.svalinn-kotlin:crypto:$versions.svalinn"
+    implementation "com.github.gnosis.svalinn-kotlin:models:$versions.svalinn"
+    implementation "com.github.gnosis.svalinn-kotlin:utils:$versions.svalinn"
+
+    implementation "com.github.gnosis.bivrost-kotlin:bivrost-solidity-types:$versions.bivrost"
+
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation("com.squareup.retrofit2:converter-moshi:$versions.retrofit") {
+        exclude group: "com.squareup.moshi", module: "moshi"
+    }
+
+    implementation "com.squareup.picasso:picasso:$versions.picasso"
+
     // Koin for Android
     implementation "org.koin:koin-android:$versions.koin"
     // Koin Android Scope features
@@ -49,10 +64,12 @@ dependencies {
     // Koin Android Experimental features
     implementation "org.koin:koin-android-ext:$versions.koin"
 
-    implementation 'com.squareup.moshi:moshi:1.8.0'
+    implementation "com.squareup.moshi:moshi:$versions.moshi"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi"
+
     implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
 
-    implementation "com.github.komputing:khex:0.6"
+    implementation "com.github.komputing:KHex:0.6"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
