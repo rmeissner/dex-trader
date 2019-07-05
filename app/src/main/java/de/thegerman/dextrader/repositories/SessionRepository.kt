@@ -64,26 +64,7 @@ class SessionRepositoryImpl(
     private fun activateSession() {
         activeSession?.let { return }
         val sessionInfo = sessionStore.list().firstOrNull() ?: return
-        val session = WCSession(
-            sessionInfo.config,
-            MoshiPayloadAdapter(moshi),
-            sessionStore,
-            OkHttpTransport.Builder(networkClient, moshi),
-            Session.PeerMeta(name = "Example App")
-        )
-        session.init()
-        session.addCallback(object : Session.Callback {
-            override fun handleMethodCall(call: Session.MethodCall) {}
-
-            override fun sessionApproved() {}
-
-            override fun sessionClosed() {
-                @Suppress("DeferredResultUnused")
-                disconnectSessionAsync()
-            }
-
-        })
-        activeSession = session
+        sessionFromConfig(sessionInfo.config).init()
     }
 
     override fun activeSessionAsync() = GlobalScope.async(Dispatchers.IO) {
@@ -96,6 +77,11 @@ class SessionRepositoryImpl(
         sessionStore.list().firstOrNull()?.let { throw IllegalStateException("Already a session active") }
         val key = ByteArray(32).also { Random.nextBytes(it) }.toNoPrefixHexString()
         val config = Session.Config(UUID.randomUUID().toString(), "http://localhost:${BridgeServer.PORT}", key)
+        sessionFromConfig(config).offer()
+        config.toWCUri()
+    }
+
+    private fun sessionFromConfig(config: Session.Config): WCSession {
         val session = WCSession(
             config,
             MoshiPayloadAdapter(moshi),
@@ -103,7 +89,6 @@ class SessionRepositoryImpl(
             OkHttpTransport.Builder(networkClient, moshi),
             Session.PeerMeta(name = "Example App")
         )
-        session.offer()
         session.addCallback(object : Session.Callback {
             override fun handleMethodCall(call: Session.MethodCall) {}
 
@@ -116,7 +101,7 @@ class SessionRepositoryImpl(
 
         })
         activeSession = session
-        config.toWCUri()
+        return session
     }
 
     override fun disconnectSessionAsync() = GlobalScope.async(Dispatchers.IO) {
