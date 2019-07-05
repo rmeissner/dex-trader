@@ -72,6 +72,10 @@ class MainViewModel(
         }
     }
 
+    /*
+     * Watch Session
+     */
+
     private var watcherJob: Job? = null
 
     private suspend fun watchSession() {
@@ -93,7 +97,7 @@ class MainViewModel(
     }
 
     /*
-     * Session loading logic
+     * Load Session Info
      */
 
     private suspend fun loadActiveSession() {
@@ -139,7 +143,7 @@ class MainViewModel(
     }
 
     /*
-     * Start Session
+     * Disconnect Session
      */
 
     private suspend fun disconnectSession() {
