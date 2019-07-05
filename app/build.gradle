@@ -30,6 +30,9 @@ dependencies {
     implementation "androidx.core:core-ktx:${versions.androidx_core_ktx}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.androidx_constraint_layout}"
 
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.androidx_lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx_lifecycle"
+
     implementation "org.java-websocket:Java-WebSocket:1.4.0"
 
     implementation 'com.github.WalletConnect:kotlin-walletconnect-lib:e399b68f8f'
@@ -48,6 +51,8 @@ dependencies {
 
     implementation 'com.squareup.moshi:moshi:1.8.0'
     implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+
+    implementation "com.github.komputing:khex:0.6"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'

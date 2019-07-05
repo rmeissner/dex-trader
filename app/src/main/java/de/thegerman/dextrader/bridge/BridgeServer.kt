@@ -26,6 +26,10 @@ class BridgeServer(moshi: Moshi) : WebSocketServer(InetSocketAddress(PORT)) {
     private val pubsLock = Any()
     private val pubsCache: MutableMap<String, String?> = ConcurrentHashMap()
 
+    fun init() {
+        Log.d("#####", "init for port $PORT")
+    }
+
     override fun onOpen(conn: WebSocket?, handshake: ClientHandshake?) {
         Log.d("#####", "onOpen: ${conn?.remoteSocketAddress?.address?.hostAddress}")
     }
